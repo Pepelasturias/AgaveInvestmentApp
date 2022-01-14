@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "516237065901",
+    "project_id": "agaveinvestment-ff844",
+    "storage_bucket": "agaveinvestment-ff844.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516237065901:android:4004e6041af630bcdf9024",
+        "android_client_info": {
+          "package_name": "com.agave.investment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "516237065901-9u4hndkusbkv0e4a05rneqmtoeht0evb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-GEEGD_1GyeBz6kvPEsdSrn1J_l_yKR8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "516237065901-9u4hndkusbkv0e4a05rneqmtoeht0evb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
