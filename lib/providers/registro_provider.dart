@@ -11,8 +11,12 @@ class RegistroProvider {
   final PreferenciasUsuario _prefs = PreferenciasUsuario();
   final String _urlRegistrar = 'registro/registrar';
 
-  registrar(ClienteModel clienteModel, String codigoPais, String smn,
-      Function response) async {
+  registrar(
+    ClienteModel clienteModel,
+    String codigoPais,
+    String smn,
+    Function response,
+  ) async {
     await utils.getDeviceDetails();
     final resp = await http.post(Uri.parse(Sistema.dominio + _urlRegistrar),
         headers: utils.headers,

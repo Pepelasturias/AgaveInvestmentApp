@@ -46,15 +46,19 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: _scaffoldKey,
-        body: ModalProgressHUD(
-          inAsyncCall: _saving,
-          child: SingleChildScrollView(
-            child: Center(
-                child:
-                    Container(child: _contenido(), width: prs.anchoFormulario)),
+      key: _scaffoldKey,
+      body: ModalProgressHUD(
+        inAsyncCall: _saving,
+        child: SingleChildScrollView(
+          child: Center(
+            child: SizedBox(
+              width: prs.anchoFormulario,
+              child: _contenido(),
+            ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Column _contenido() {
@@ -68,28 +72,30 @@ class _LoginPageState extends State<LoginPage> {
               //mio
               Container(
                 margin: EdgeInsets.only(
-                    top: 60,
-                    right: 35,
+                  top: 60,
+                  right: 35,
                 ),
                 child: Lottie.asset(
-                    'assets/json/greendata.json',                 //archivo a reproducir
-                    repeat: false,                        //si se repite la animacion
-                    fit: BoxFit.fill
-                ),
+                    'assets/json/greendata.json', //archivo a reproducir
+                    repeat: false, //si se repite la animacion
+                    fit: BoxFit.fill),
               ),
               //hasta aqui
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 150.0,
+                  Expanded(
                     child: TextButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('Login',
-                              style: TextStyle(
-                                  color: prs.colorLinearProgress,
-                                  fontSize: 20.0)),
+                          Text(
+                            'Login',
+                            style: TextStyle(
+                              color: prs.colorLinearProgress,
+                              fontSize: 20.0,
+                            ),
+                          ),
                           Divider(
                               color: prs.colorLinearProgress, thickness: 3.0)
                         ],
@@ -97,8 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {},
                     ),
                   ),
-                  Container(
-                    width: 150.0,
+                  Expanded(
                     child: TextButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

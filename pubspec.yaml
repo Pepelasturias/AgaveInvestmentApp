@@ -1,16 +1,9 @@
 name: curiosity
 description: Compra a domicilio a los mejores restaurantes en Loja, encuentra cafeterías el delicioso tamal Lojano. Todos los días encontraras restaurant con envío gratis.
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+#
+# Flutter Version -> 2.0.6
+#
 version: 0.0.5+5
 
 environment:
@@ -33,7 +26,7 @@ dependencies:
   # flutter_paymentez: ^0.0.11 #Descargar binarios https://github.com/paymentez/paymentez-ios, compilar y reemplazar .framework en .symlinks/plugins paymentez ios
 
   credit_card_validator: ^2.0.0
-  google_maps_flutter: ^2.0.10
+  google_maps_flutter: 
   location_permissions: ^4.0.0
 
   permission_asker: ^1.0.0+1

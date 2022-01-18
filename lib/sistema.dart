@@ -6,7 +6,7 @@ class Sistema {
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //OJO esta IP http://10.0.2.2/ es util para quienes estan levantando el servidor de recursos en la misma maquina donde tambien
   //Estan corriendo el APP en el emulador dejo link para mas detalles https://stackoverflow.com/questions/6760585/accessing-localhostport-from-android-emulator
-  static const String DOMINIO_GLOBAL = 'http://192.168.100.50/';
+  static const String DOMINIO_GLOBAL = 'http://147.182.192.64/';
 
   //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
