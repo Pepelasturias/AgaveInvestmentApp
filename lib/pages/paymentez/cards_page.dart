@@ -32,15 +32,15 @@ class CardsPage extends StatefulWidget {
   final String monto;
   final String motivo;
 
-  CardsPage(
-      {this.idAgencia: '0',
-      this.img,
-      this.isMenu: false,
-      this.title: 'Métodos de pago',
-      this.agencia: '',
-      this.monto: '',
-      this.motivo: ''})
-      : super();
+  CardsPage({
+    this.idAgencia: '0',
+    this.img,
+    this.isMenu: false,
+    this.title: 'Métodos de pago',
+    this.agencia: '',
+    this.monto: '',
+    this.motivo: '',
+  }) : super();
 
   @override
   _CardsPageState createState() => _CardsPageState();
@@ -72,15 +72,6 @@ class _CardsPageState extends State<CardsPage> {
         centerTitle: true,
         title: Text('${widget.idAgencia == '0' ? '' : 'Pay '}${widget.title}'),
         leading: utils.leading(context),
-        actions: [
-          Visibility(
-            visible: widget.idAgencia == '0',
-            child: IconButton(
-              icon: prs.iconoObsequio,
-              onPressed: _canjearRegalo,
-            ),
-          ),
-        ],
       ),
       key: _scaffoldKey,
       body: ModalProgressHUD(

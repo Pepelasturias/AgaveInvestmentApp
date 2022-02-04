@@ -35,7 +35,8 @@ class Sistema {
   static const int IS_ACREDITADO = 200;
   static const int IS_TOKEN = 300;
 
-  static const String EFECTIVO = 'Efectivo';
+  //Se cambia el texto mientras el modulo se corrige
+  static const String EFECTIVO = '';
   static const String TARJETA = 'Tarjeta';
   static const String ID_FOMRA_PAGO_TARJETA = '23';
   static const String CUPON = 'Cupón';

@@ -126,7 +126,7 @@ class CarritoDialogState extends State<CarritoDialog>
       if (mounted) setState(() {});
       if (descuentoPorCupon <= 0) {
         Future.delayed(const Duration(milliseconds: 1150), () async {
-          _cardBloc.actualizar(_cardBloc.cardSeleccionada);
+          //_cardBloc.actualizar(_cardBloc.cardSeleccionada);
           _isLineProgress = false;
           if (mounted) setState(() {});
         });
@@ -165,7 +165,7 @@ class CarritoDialogState extends State<CarritoDialog>
         }
       });
       if (!isCuponvalido) {
-        _cardBloc.actualizar(CardModel());
+        //_cardBloc.actualizar(CardModel());
         fBotonDerecha() async {
           Navigator.of(context).pop();
           _update();
@@ -199,14 +199,6 @@ class CarritoDialogState extends State<CarritoDialog>
 
   bool _saving = false;
   TextEditingController _inputFieldDateController;
-
-  Widget _crearCodigo() {
-    return TextFormField(
-      controller: _inputFieldDateController,
-      textCapitalization: TextCapitalization.words,
-      decoration: prs.decoration('Hashtag promocional', prs.iconoCodigo),
-    );
-  }
 
   _canjer(String codigo) async {
     FocusScope.of(context)?.requestFocus(FocusNode());
@@ -504,8 +496,6 @@ class CarritoDialogState extends State<CarritoDialog>
                     _numero(),
                     SizedBox(height: 10.0),
                     _facturas(context),
-                    SizedBox(height: 10.0),
-                    _crearCodigo(),
                   ],
                 ),
               ),

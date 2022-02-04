@@ -72,17 +72,6 @@ class _MenuWidgetState extends State<MenuWidget> {
                           }),
                     ),
                     _elementos(),
-                    Container(
-                      padding: EdgeInsets.only(left: 15.0),
-                      child: ListTile(
-                          dense: true,
-                          leading: prs.iconoPuntos,
-                          title: Text('Insignia & Money | Cash'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            Navigator.pushNamed(context, 'puntos');
-                          }),
-                    ),
                   ],
                 ),
               ),

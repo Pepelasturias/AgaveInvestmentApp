@@ -51,13 +51,7 @@ class CardBloc {
     final cardesResponse = await _cardProvider.listar(idAgencia);
     cardes.clear();
     //Solo el idAgencia es diferente de 0 significa que vamos a usar Curiosity Pay
-    if (idAgencia == '0') {
-      cardes.add(CardModel(
-          modo: Sistema.EFECTIVO,
-          number: Sistema.EFECTIVO,
-          type: Sistema.EFECTIVO,
-          holderName: 'Pagar en efectivo'));
-    }
+    // if (idAgencia == '0') {}
     cardes.addAll(cardesResponse);
     cardSink(cardes);
     return cardesResponse;

@@ -29,8 +29,8 @@ class CardModel {
     this.transactionReference,
     this.type,
     this.cvv,
-    this.number: Sistema.EFECTIVO,
-    this.modo: Sistema.EFECTIVO,
+    this.number: 'Tarjeta',
+    this.modo: 'Tarjeta',
   });
 
   bool isTarjeta() {

@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
               //mio
               Container(
                 margin: EdgeInsets.only(
-                  top: 60,
+                  top: 40,
                   right: 35,
                 ),
                 child: Lottie.asset(

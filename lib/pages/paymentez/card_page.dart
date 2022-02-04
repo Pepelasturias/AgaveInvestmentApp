@@ -1,5 +1,6 @@
 import 'package:credit_card_type_detector/credit_card_type_detector.dart' as cr;
 import 'package:flutter/material.dart';
+import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
@@ -57,7 +58,8 @@ class _CardPage extends State<CardPage> {
         progressIndicator: utils.progressIndicator('Cargando...'),
         inAsyncCall: _saving,
         child: Center(
-            child: Container(child: _body(), width: prs.anchoFormulario)),
+          child: _body(),
+        ),
       ),
     );
   }
@@ -65,10 +67,23 @@ class _CardPage extends State<CardPage> {
   Widget _body() {
     return Column(
       children: <Widget>[
-        Expanded(child: SingleChildScrollView(child: _contenido())),
+        Expanded(
+          child: SingleChildScrollView(
+            child: _contenido(),
+          ),
+        ),
         btn.confirmar('REGISTRAR', _registrarTarjeta)
       ],
     );
+  }
+
+  bool showBack = false;
+
+  void showBackHandler([showBackValue = true]) {
+    if (showBack == showBackValue) return;
+    setState(() {
+      showBack = showBackValue;
+    });
   }
 
   Widget _contenido() {
@@ -77,19 +92,32 @@ class _CardPage extends State<CardPage> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 5.0),
+          CreditCardWidget(
+            cardNumber: creditCardNumber,
+            expiryDate: '$monthValue/$yearValue',
+            cardHolderName: cardHolderName,
+            labelCardHolder: cardHolderName,
+            isChipVisible: true,
+            isSwipeGestureEnabled: true,
+            isHolderNameVisible: true,
+            cvvCode: cvvValue,
+            showBackView: showBack,
+            obscureCardCvv: false,
+            onCreditCardWidgetChange: (_) => false,
+          ),
           Text(
             'Para registrar tu tarjeta realizaremos un cargo de un monto aleatorio, el mismo se REVERSARÁ automáticamente.',
             textAlign: TextAlign.justify,
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Text(Sistema.MENSAJE_NUEVA_CAR, textAlign: TextAlign.justify),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           Form(
             key: _formKey,
             child: Column(
               children: <Widget>[
                 _crearNumero(),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Row(
                   children: [
                     _crearMes(),
@@ -99,7 +127,7 @@ class _CardPage extends State<CardPage> {
                     _cvv(),
                   ],
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 _crearNombres(),
               ],
             ),
@@ -114,6 +142,7 @@ class _CardPage extends State<CardPage> {
       onChanged: (String str) {
         creditCardNumber = str;
         if (mounted) setState(() {});
+        showBackHandler(false);
         cr.CreditCardType brand = cr.detectCCType(str);
 
         IconData ccBrandIcon;
@@ -145,25 +174,37 @@ class _CardPage extends State<CardPage> {
         _cardModel.number = value;
       },
       keyboardType: TextInputType.number,
-      decoration: prs.decoration('Número de tarjeta', null,
-          suffixIcon: brandIcon != null
-              ? Icon(brandIcon, color: prs.colorIcons, size: 34)
-              : null),
+      decoration: prs.decoration(
+        'Número de tarjeta',
+        null,
+        suffixIcon: brandIcon != null
+            ? Icon(brandIcon, color: prs.colorIcons, size: 34)
+            : null,
+      ),
+      maxLength: 16,
     );
   }
+
+  String cardHolderName = "";
 
   Widget _crearNombres() {
     return Container(
       child: TextFormField(
           textCapitalization: TextCapitalization.words,
-          onSaved: (value) {
-            _cardModel.holderName = value;
+          onChanged: (value) {
+            setState(() {
+              _cardModel.holderName = value;
+              cardHolderName = value;
+            });
+            showBackHandler(false);
           },
           validator: val.validarNombre,
           keyboardType: TextInputType.name,
           decoration: prs.decoration('Nombre del titular impreso', null)),
     );
   }
+
+  String monthValue = "";
 
   Widget _crearMes() {
     return Container(
@@ -172,8 +213,13 @@ class _CardPage extends State<CardPage> {
         maxLength: 2,
         keyboardType: TextInputType.number,
         decoration: prs.decoration('Mes', null),
-        onSaved: (value) {
+        onChanged: (value) {
           _cardModel.expiryMonth = value;
+          final parsedValue = int.parse(value);
+          monthValue =
+              parsedValue < 10 ? '0$parsedValue' : parsedValue.toString();
+          setState(() => true);
+          showBackHandler(false);
         },
         validator: (value) {
           if (value.trim().length < 1) return 'Vencimiento';
@@ -188,14 +234,21 @@ class _CardPage extends State<CardPage> {
     );
   }
 
+  String yearValue = "";
+
   Widget _crearAnio() {
     return Container(
       width: 70.0,
       child: TextFormField(
         maxLength: 2,
         keyboardType: TextInputType.number,
-        onSaved: (value) {
+        onChanged: (value) {
           _cardModel.expiryYear = value;
+          final parsedValue = int.parse(value);
+          yearValue =
+              parsedValue < 10 ? '0$parsedValue' : parsedValue.toString();
+          setState(() => true);
+          showBackHandler(false);
         },
         decoration: prs.decoration('Año', null),
         validator: (value) {
@@ -211,6 +264,8 @@ class _CardPage extends State<CardPage> {
     );
   }
 
+  String cvvValue = "";
+
   Widget _cvv() {
     return Container(
       width: 80.0,
@@ -218,8 +273,11 @@ class _CardPage extends State<CardPage> {
         maxLength: 5,
         keyboardType: TextInputType.number,
         decoration: prs.decoration('CVV', null),
-        onSaved: (value) {
+        onChanged: (value) {
           _cardModel.cvv = value;
+          cvvValue = value;
+          setState(() => true);
+          showBackHandler();
         },
         validator: (value) {
           if (value.trim().length < 3) return 'Error';
