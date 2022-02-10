@@ -547,13 +547,19 @@ class ClienteProvider {
     return response(1, config.MENSAJE_INTERNET, push, notificacionModel);
   }
 
-  autenticarClave(String codigoPais, String cliente, String clave,
-      Function response) async {
+  autenticarClave(
+    String codigoPais,
+    String cliente,
+    String clave,
+    Function response,
+  ) async {
     await utils.getDeviceDetails();
     var client = http.Client();
     try {
       final resp = await client.post(
-          Uri.parse(Sistema.dominio + _urlAutenticarClave),
+          Uri.parse(
+            Sistema.dominio + _urlAutenticarClave,
+          ),
           headers: utils.headers,
           body: {
             'cliente': cliente,
@@ -563,18 +569,18 @@ class ClienteProvider {
             'codigoPais': codigoPais,
           });
       Map<String, dynamic> decodedResp = json.decode(resp.body);
+
       if (decodedResp['estado'] == 1) {
         _prefs.auth = decodedResp['auth'];
-        ClienteModel clienteModel =
-            ClienteModel.fromJson(decodedResp['cliente']);
+        ClienteModel clienteModel = ClienteModel.fromJson(
+          decodedResp['cliente'],
+        );
         _prefs.idCliente = clienteModel.idCliente.toString();
         _prefs.clienteModel = clienteModel;
         return response(1, clienteModel);
       }
       return response(0, decodedResp['error']);
     } catch (err) {
-      print('cliente_provider error: $err');
-      //return response(0, 'Lo sentimos ocurrio un problema error: $err');
     } finally {
       client.close();
     }

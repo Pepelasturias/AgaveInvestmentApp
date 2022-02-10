@@ -104,11 +104,10 @@ class _CalificaciondespachoPageState extends State<CalificaciondespachoPage> {
                   children: <Widget>[
                     SizedBox(height: 10.0),
                     Text(
-                        'Solicitud ${despachoModel.idDespachoEstado == conf.DESPACHO_CANCELADA ? 'cancelada' : 'entregada'}',
-                        style: TextStyle(fontSize: 24.0),
-                        textAlign: TextAlign.center),
-                    SizedBox(height: 10.0),
-                    _estrellas(),
+                      'Solicitud ${despachoModel.idDespachoEstado == conf.DESPACHO_CANCELADA ? 'cancelada' : 'entregada'}',
+                      style: TextStyle(fontSize: 24.0),
+                      textAlign: TextAlign.center,
+                    ),
                     SizedBox(height: 5.0),
                     _crearComentario(),
                   ],
@@ -140,19 +139,6 @@ class _CalificaciondespachoPageState extends State<CalificaciondespachoPage> {
         ),
       ],
     );
-  }
-
-  Widget _estrellas() {
-    double _initialRating = (tipo == conf.TIPO_CLIENTE
-        ? despachoModel.calificacionCliente
-        : despachoModel.calificacionConductor);
-
-    return utils.estrellas(_initialRating, (rating) {
-      if (tipo == conf.CHAT_ENVIA_CLIENTE)
-        despachoModel.calificacionCliente = rating;
-      else
-        despachoModel.calificacionConductor = rating;
-    });
   }
 
   Widget _crearComentario() {

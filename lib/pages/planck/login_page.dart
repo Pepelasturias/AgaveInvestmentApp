@@ -9,7 +9,6 @@ import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 import '../../model/cliente_model.dart';
 import '../../preference/shared_preferences.dart';
 import '../../providers/cliente_provider.dart';
-import '../../sistema.dart';
 import '../../utils/button.dart' as btn;
 import '../../utils/personalizacion.dart' as prs;
 import '../../utils/redes_sociales.dart' as rs;
@@ -64,21 +63,21 @@ class _LoginPageState extends State<LoginPage> {
   Column _contenido() {
     return Column(
       children: <Widget>[
-        SizedBox(height: 5.0),
+        const SizedBox(height: 5.0),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          padding: EdgeInsets.all(10),
           child: Column(
             children: <Widget>[
-              //mio
               Container(
                 margin: EdgeInsets.only(
                   top: 40,
                   right: 35,
                 ),
                 child: Lottie.asset(
-                    'assets/json/greendata.json', //archivo a reproducir
-                    repeat: false, //si se repite la animacion
-                    fit: BoxFit.fill),
+                  'assets/json/greendata.json', //archivo a reproducir
+                  repeat: false, //si se repite la animacion
+                  fit: BoxFit.fill,
+                ),
               ),
               //hasta aqui
               Row(
@@ -97,7 +96,9 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Divider(
-                              color: prs.colorLinearProgress, thickness: 3.0)
+                            color: prs.colorLinearProgress,
+                            thickness: 3.0,
+                          )
                         ],
                       ),
                       onPressed: () {},
@@ -108,16 +109,22 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text('Registrarse',
-                              style: TextStyle(
-                                  color: prs.colorTextTitle, fontSize: 20.0)),
+                          Text(
+                            'Registrarse',
+                            style: TextStyle(
+                              color: prs.colorTextTitle,
+                              fontSize: 20.0,
+                            ),
+                          ),
                           SizedBox(height: 20.0),
                         ],
                       ),
                       onPressed: () {
-                        widget.tabController.animateTo(1,
-                            duration: Duration(seconds: 3),
-                            curve: Curves.elasticInOut);
+                        widget.tabController.animateTo(
+                          1,
+                          duration: Duration(seconds: 3),
+                          curve: Curves.elasticInOut,
+                        );
                       },
                     ),
                   ),
@@ -145,7 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               SizedBox(height: 10.0),
-              btn.booton('INICIAR SESIÓN', _autenticarClave),
+              btn.booton(
+                'INICIAR SESIÓN',
+                _autenticarClave,
+              ),
               SizedBox(height: 10.0),
               TextButton(
                 child: Column(
@@ -226,47 +236,61 @@ class _LoginPageState extends State<LoginPage> {
         });
   }
 
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   _autenticarClave() {
     FocusScope.of(context).requestFocus(FocusNode());
     _saving = true;
-    if (mounted) setState(() {});
+    setState(() {});
+
     if (cliente.celular.toString().length <= 8 ||
         cliente.clave.toString().length <= 3) {
       _formKey.currentState.validate();
       _saving = false;
-      if (mounted) setState(() {});
+      setState(() {});
       return;
     }
     if (!isCelularValido) {
       _saving = false;
-      if (mounted) setState(() {});
+      setState(() {});
       return;
     }
+
     _formKey.currentState.save();
-    _clienteProvider.autenticarClave(codigoPais, cliente.celular.toString(),
-        utils.generateMd5(cliente.clave), (estado, clienteModel) {
-      _saving = false;
-      if (mounted) if (mounted) setState(() {});
-      if (estado == 0) return _mostrarSnackBar(clienteModel);
-      rs.ingresar(context, clienteModel);
-    });
+
+    _clienteProvider.autenticarClave(
+      codigoPais,
+      cliente.celular.toString(),
+      utils.generateMd5(cliente.clave),
+      (estado, clienteModel) {
+        _saving = false;
+        setState(() {});
+        if (estado == 0) return _mostrarSnackBar(clienteModel);
+        rs.ingresar(context, clienteModel);
+      },
+    );
   }
 
   void _autenticarFacebook() async {
     _saving = true;
-    if (mounted) setState(() {});
+    setState(() {});
     await rs.autenticarFacebook(context, codigoPais, smn, (login) {
       _saving = false;
-      if (mounted) if (mounted) setState(() {});
+      if (mounted) setState(() {});
     });
   }
 
   void _autenticarApple() async {
     _saving = true;
-    if (mounted) setState(() {});
+    setState(() {});
     bool respuesta = await rs.autenticarApple(context, codigoPais, smn);
     _saving = false;
-    if (mounted) if (mounted) setState(() {});
+    if (mounted) setState(() {});
     if (!respuesta)
       _mostrarSnackBar('Necesitamos información del correo electrónico.');
   }
@@ -274,23 +298,23 @@ class _LoginPageState extends State<LoginPage> {
   void _autenticarGoogle(
       context, correo, img, idGoogle, nombres, apellidos) async {
     _saving = true;
-    if (mounted) setState(() {});
+    setState(() {});
     await rs.autenticarGoogle(context, _googleSignIn, codigoPais, smn, correo,
         img, idGoogle, nombres, apellidos);
     _saving = false;
-    if (mounted) if (mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   Future<void> _iniciarSessionGoogle() async {
     _saving = true;
-    if (mounted) setState(() {});
+    setState(() {});
     try {
       await _googleSignIn.signIn();
     } catch (err) {
       print('login_page error: $err');
     } finally {
       _saving = false;
-      if (mounted) if (mounted) setState(() {});
+      if (mounted) setState(() {});
     }
   }
 

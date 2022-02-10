@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:badges/badges.dart';
+import 'package:curiosity/utils/loader_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -90,7 +91,7 @@ class _CatalogoPageState extends State<CatalogoPage>
   CategoriaModel _categoriaModelSelect = CategoriaModel();
   bool _direccion = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController _textControllerBuscar;
+  final _textControllerBuscar = TextEditingController(text: '');
   String _tituloAgencias = 'Productos';
   String _subTituloAgencias = 'Te van a encantar';
 
@@ -99,6 +100,7 @@ class _CatalogoPageState extends State<CatalogoPage>
   double maxCrossAxisExtent = 198.0;
   String _tituloOfertas = 'Ofertas';
   String _subTituloOfertas = 'Te pueden interesar';
+  LoaderService loaderController;
 
   void disposeStreams() {
     _cambios?.close();
@@ -106,70 +108,88 @@ class _CatalogoPageState extends State<CatalogoPage>
 
   @override
   void initState() {
-    _textControllerBuscar = TextEditingController(text: '');
-    bool _init = false;
-    _cambios.stream.listen((internet) {
-      if (!mounted) return;
-      if (internet && _init) {
-        _catalogoBloc.listarAgencias(_selectedIndex,
-            direccionModel: _direccionBloc.direccionSeleccionada);
-        _cajeroBloc.listarEnCamino();
+    loaderController = LoaderService.of(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      loaderController.showLoader();
+
+      bool _init = false;
+      _cambios.stream.listen((internet) {
+        if (!mounted) return;
+
+        if (internet && _init) {
+          _catalogoBloc.listarAgencias(
+            _selectedIndex,
+            direccionModel: _direccionBloc.direccionSeleccionada,
+          );
+          _cajeroBloc.listarEnCamino();
+        }
+        _direccionBloc.listar();
+        _init = true;
+        _refrezcar();
+      });
+
+      _typeControllerDireccion.text =
+          _direccionBloc.direccionSeleccionada.alias;
+      Conexion();
+      WidgetsBinding.instance.addObserver(this);
+
+      if (_direccionBloc.direccionSeleccionada.idUrbe <= 0) {
+        _direccionBloc.direccionSeleccionada.idUrbe = int.parse(_prefs.idUrbe);
       }
+
+      _catalogoBloc
+          .listarAgencias(
+            _selectedIndex,
+            direccionModel: _direccionBloc.direccionSeleccionada,
+          )
+          .then(
+            (value) => loaderController.closeLoader(),
+          );
+
+      _cajeroBloc.listarEnCamino();
       _direccionBloc.listar();
-      _init = true;
-      _refrezcar();
+      _promocionBloc.listar();
+
+      _pushProvider.context = context;
+      _pushProvider.chatsCompra.listen((ChatCompraModel chatCompraModel) {
+        if (!mounted) return;
+        _cajeroBloc.actualizarPorChat(chatCompraModel);
+      });
+
+      _pushProvider.objects.listen((despacho) {
+        if (!mounted) return;
+        DespachoModel _despacho = despacho;
+        _cajeroBloc.actualizaridDespacho(
+          _despacho.idCompra,
+          _despacho.idDespacho,
+          conf.COMPRA_DESPACHADA,
+        );
+      });
+
+      _pushProvider.chatsDespacho.listen((ChatDespachoModel chatDespacho) {
+        if (!mounted) return;
+
+        if (chatDespacho.idDespachoEstado == conf.DESPACHO_ENTREGADO) {
+          _cajeroBloc.actualizarPorEntrega(
+            chatDespacho.idDespacho,
+            conf.COMPRA_ENTREGADA,
+          );
+        }
+      });
+
+      _clienteProvider.actualizarToken().then((isActualizo) {
+        permisos.verificarSession(context);
+      });
+
+      _promocionBloc.carrito();
+      deeplink.initDynamicLinks(widget.isDeeplink, context, _start, _end);
+
+      _cargarCategorias(_prefs.idUrbe);
+
+      _pushProvider.cancelAll();
     });
-
-    _typeControllerDireccion.text = _direccionBloc.direccionSeleccionada.alias;
-    Conexion();
-    WidgetsBinding.instance.addObserver(this);
-
-    if (_direccionBloc.direccionSeleccionada.idUrbe <= 0) {
-      _direccionBloc.direccionSeleccionada.idUrbe = int.parse(_prefs.idUrbe);
-    }
-    // if (Sistema.idAplicativo == Sistema.idAplicativoCuxi) {
-    //   _cajeroBloc.listar(direccionModel: _direccionBloc.direccionSeleccionada);
-    // } else {
-    _catalogoBloc.listarAgencias(_selectedIndex,
-        direccionModel: _direccionBloc.direccionSeleccionada);
-    _cajeroBloc.listarEnCamino();
-    // }
-    _direccionBloc.listar();
-    _promocionBloc.listar();
     super.initState();
-
-    _pushProvider.context = context;
-    _pushProvider.chatsCompra.listen((ChatCompraModel chatCompraModel) {
-      if (!mounted) return;
-      _cajeroBloc.actualizarPorChat(chatCompraModel);
-    });
-
-    _pushProvider.objects.listen((despacho) {
-      if (!mounted) return;
-      DespachoModel _despacho = despacho;
-      _cajeroBloc.actualizaridDespacho(
-          _despacho.idCompra, _despacho.idDespacho, conf.COMPRA_DESPACHADA);
-    });
-
-    _pushProvider.chatsDespacho.listen((ChatDespachoModel chatDespacho) {
-      if (!mounted) return;
-
-      if (chatDespacho.idDespachoEstado == conf.DESPACHO_ENTREGADO) {
-        _cajeroBloc.actualizarPorEntrega(
-            chatDespacho.idDespacho, conf.COMPRA_ENTREGADA);
-      }
-    });
-
-    _clienteProvider.actualizarToken().then((isActualizo) {
-      permisos.verificarSession(context);
-    });
-
-    _promocionBloc.carrito();
-    deeplink.initDynamicLinks(widget.isDeeplink, context, _start, _end);
-
-    _cargarCategorias(_prefs.idUrbe);
-
-    _pushProvider.cancelAll();
   }
 
   _start() {
@@ -352,7 +372,11 @@ class _CatalogoPageState extends State<CatalogoPage>
             ? utils.progressRadar()
             : utils.progressIndicator('Consultando...'),
         inAsyncCall: _saving,
-        child: Center(child: Container(child: _body(), width: prs.ancho)),
+        child: Builder(builder: (context) {
+          return Center(
+            child: _body(),
+          );
+        }),
       ),
       bottomNavigationBar: _bottomNavigationBar(),
     );
@@ -549,17 +573,17 @@ class _CatalogoPageState extends State<CatalogoPage>
     boton.add(BottomNavigationBarItem(
         icon: Icon(FontAwesomeIcons.thLarge), label: 'Catálogo'));
     boton.add(BottomNavigationBarItem(
-      icon: element <= 0
-          ? Icon(FontAwesomeIcons.peopleCarry)
-          : Badge(
-              animationDuration: Duration(milliseconds: 300),
-              position: BadgePosition.bottomStart(bottom: 10, start: 30),
-              animationType: BadgeAnimationType.slide,
-              badgeContent: Text(element.toString(),
-                  style: TextStyle(color: Colors.white)),
-              child: Icon(FontAwesomeIcons.peopleCarry),
-            ),
-      label: 'En proceso'));
+        icon: element <= 0
+            ? Icon(FontAwesomeIcons.peopleCarry)
+            : Badge(
+                animationDuration: Duration(milliseconds: 300),
+                position: BadgePosition.bottomStart(bottom: 10, start: 30),
+                animationType: BadgeAnimationType.slide,
+                badgeContent: Text(element.toString(),
+                    style: TextStyle(color: Colors.white)),
+                child: Icon(FontAwesomeIcons.peopleCarry),
+              ),
+        label: 'En proceso'));
     return boton;
   }
 
@@ -613,18 +637,21 @@ class _CatalogoPageState extends State<CatalogoPage>
             Text('si el correo es incorrecto corrigelo en tu'),
             SizedBox(height: 8.0),
             GestureDetector(
-                child: Text('PERFIL',
-                    style: TextStyle(
-                        color: Colors.indigo,
-                        decoration: TextDecoration.underline)),
+                child: Text(
+                  'PERFIL',
+                  style: TextStyle(
+                    color: Colors.indigo,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, 'perfil');
                 }),
             SizedBox(height: 15.0),
             btn.confirmar('REGISTRAR DIRECCIÓN', _requestGps),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             Text(Sistema.MESAJE_CATALOGO, textAlign: TextAlign.justify),
-            SizedBox(height: 90.0),
+            const SizedBox(height: 90.0),
           ],
         ),
       );
@@ -820,7 +847,7 @@ class _CatalogoPageState extends State<CatalogoPage>
             stream: _catalogoBloc.recomendadoStream,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data.length <= 0) return Container();
+                if (snapshot.data.length <= 0) return const SizedBox.shrink();
                 return createListViewOfertasEspeciales(context, snapshot);
               }
               return ShimmerCard();
@@ -830,7 +857,8 @@ class _CatalogoPageState extends State<CatalogoPage>
         SliverToBoxAdapter(child: _categorias()),
         SliverToBoxAdapter(child: _productosDestacados(context)),
         SliverToBoxAdapter(
-            child: _label('Mejor valorados', 'Las personas los aman')),
+          child: _label('Mejor valorados', 'Las personas los aman'),
+        ),
         createListViewMejorValorados(1),
         SliverToBoxAdapter(child: _productosPromocion(context)),
         SliverToBoxAdapter(
@@ -846,7 +874,8 @@ class _CatalogoPageState extends State<CatalogoPage>
           ),
         ),
         SliverToBoxAdapter(
-            child: _label('Populares', 'Lo que a las personas les encanta.')),
+          child: _label('Populares', 'Lo que a las personas les encanta.'),
+        ),
         createListViewMejorValorados(2),
         SliverToBoxAdapter(child: _label('Principales', Sistema.slogan)),
         createListViewMejorValorados(3),
@@ -916,7 +945,9 @@ class _CatalogoPageState extends State<CatalogoPage>
   }
 
   Widget createListViewOfertasEspeciales(
-      BuildContext context, AsyncSnapshot<List<CatalogoModel>> snapshot) {
+    BuildContext context,
+    AsyncSnapshot<List<CatalogoModel>> snapshot,
+  ) {
     if (snapshot.data.length <= 0 || snapshot.data[0].idAgencia == -100) {
       return Container();
     }
@@ -926,8 +957,11 @@ class _CatalogoPageState extends State<CatalogoPage>
       children: [
         // _crearHoraInicio(),
         _label(_tituloAgencias, _subTituloAgencias),
-        ComprarCatalogoWidget(pageControllerRecomendado,
-            snapshot: snapshot, onTapCatalogo: _onTapCatalogo),
+        ComprarCatalogoWidget(
+          pageControllerRecomendado,
+          snapshot: snapshot,
+          onTapCatalogo: _onTapCatalogo,
+        ),
       ],
     );
   }

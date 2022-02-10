@@ -1,3 +1,4 @@
+import 'package:curiosity/utils/loader_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -23,7 +24,10 @@ class _NotificacionPageState extends State<NotificacionPage> {
 
   @override
   void initState() {
-    _notificacionBloc.listar();
+    final loaderController = LoaderService.of(context);
+    loaderController.showLoader();
+
+    _notificacionBloc.listar().then((value) => loaderController.closeLoader());
     super.initState();
   }
 

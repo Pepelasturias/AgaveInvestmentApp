@@ -50,8 +50,6 @@ class CardBloc {
   Future<List<CardModel>> listar(String idAgencia) async {
     final cardesResponse = await _cardProvider.listar(idAgencia);
     cardes.clear();
-    //Solo el idAgencia es diferente de 0 significa que vamos a usar Curiosity Pay
-    // if (idAgencia == '0') {}
     cardes.addAll(cardesResponse);
     cardSink(cardes);
     return cardesResponse;

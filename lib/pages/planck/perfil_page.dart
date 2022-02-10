@@ -187,10 +187,6 @@ class _PerfilPageState extends State<PerfilPage> {
             circularStrokeCap: CircularStrokeCap.round,
             progressColor: prs.colorButtonSecondary,
           ),
-          _estrellas(),
-          Text(
-              "Correctas: ${_cliente.correctos} - Canceladas: ${_cliente.canceladas}",
-              style: TextStyle(fontSize: 12.0)),
           SizedBox(height: 20.0),
           Form(
             key: _formKey,
@@ -228,11 +224,6 @@ class _PerfilPageState extends State<PerfilPage> {
         ],
       ),
     );
-  }
-
-  Widget _estrellas() {
-    return utils.estrellas(
-        (_cliente.calificacion / _cliente.calificaciones), (value) {});
   }
 
   Widget _crearNombres() {

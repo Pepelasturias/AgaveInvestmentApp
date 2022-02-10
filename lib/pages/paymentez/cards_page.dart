@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -80,103 +79,16 @@ class _CardsPageState extends State<CardsPage> {
         progressIndicator: utils.progressIndicator('Cargando...'),
         inAsyncCall: _saving,
         child: Center(
-            child: Container(child: _body(), width: prs.anchoFormulario)),
+          child: Container(
+            child: _body(),
+            width: prs.anchoFormulario,
+          ),
+        ),
       ),
     );
   }
 
-  void _canjearRegalo() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.all(10.0),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 20.0),
-                Text('${Sistema.aplicativo} GIFT'),
-                SizedBox(height: 10.0),
-                Form(
-                  key: _formKeyGIFT,
-                  child: _crearNombres(),
-                ),
-                SizedBox(height: 15.0),
-                Text('Aplican términos y condiciones.',
-                    style: TextStyle(fontSize: 12.0),
-                    textAlign: TextAlign.justify),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('CANCELAR'),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    primary: prs.colorButtonSecondary,
-                    elevation: 2.0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0))),
-                label: Text('CANJEAR'),
-                icon: Icon(
-                  FontAwesomeIcons.handHoldingHeart,
-                  size: 18.0,
-                ),
-                onPressed: _canejar,
-              ),
-            ],
-          );
-        });
-  }
-
-  _canejar() async {
-    if (!_formKeyGIFT.currentState.validate()) return;
-    FocusScope.of(context).requestFocus(FocusNode());
-    _formKeyGIFT.currentState.save();
-    Navigator.of(context).pop();
-    _saving = true;
-    if (mounted) setState(() {});
-    await _cardBloc.canejar(_codigo, _analizarRespuesta);
-  }
-
-  _analizarRespuesta(estado, String mensaje, CardModel cardModel) {
-    _saving = false;
-    if (mounted) setState(() {});
-    if (estado == 1) {
-      fBotonIDerecha() {
-        _cardBloc.actualizar(cardModel);
-        Navigator.pop(context);
-        _irAmenu(cardModel.idAgencia.toString());
-      }
-
-      dlg.mostrar(context, mensaje,
-          mIzquierda: 'CANCELAR',
-          mBotonDerecha: 'VER MENU',
-          color: prs.colorButtonSecondary,
-          icon: FontAwesomeIcons.store,
-          fBotonIDerecha: fBotonIDerecha);
-    } else {
-      dlg.mostrar(context, mensaje);
-    }
-  }
-
   final PreferenciasUsuario _prefs = PreferenciasUsuario();
-  final GlobalKey<FormState> _formKeyGIFT = GlobalKey<FormState>();
-  String _codigo = '';
-
-  Widget _crearNombres() {
-    return TextFormField(
-      maxLength: 90,
-      autofocus: true,
-      textCapitalization: TextCapitalization.characters,
-      decoration: prs.decoration('Código GIFT', null),
-      onSaved: (value) => _codigo = value,
-      validator: val.validarMinimo8,
-    );
-  }
 
   final int estadoTarjetaProximamente = 0;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -193,11 +105,12 @@ class _CardsPageState extends State<CardsPage> {
                 if (_prefs.estadoTc == estadoTarjetaProximamente)
                   return dlg.mostrar(context, _prefs.mensajeTc);
                 showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return CardPage(widget.idAgencia, _verificarTarjeta);
-                    });
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) {
+                    return CardPage(widget.idAgencia, _verificarTarjeta);
+                  },
+                );
               })
       ],
     );

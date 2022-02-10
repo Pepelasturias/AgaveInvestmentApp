@@ -109,11 +109,10 @@ class _CalificacioncompraPageState extends State<CalificacioncompraPage> {
               children: <Widget>[
                 SizedBox(height: 10.0),
                 Text(
-                    'Solicitud ${cajeroModel.idCompraEstado == conf.COMPRA_CANCELADA ? 'cancelada' : 'entregada'}',
-                    style: TextStyle(fontSize: 24.0),
-                    textAlign: TextAlign.center),
-                SizedBox(height: 10.0),
-                _estrellas(),
+                  'Solicitud ${cajeroModel.idCompraEstado == conf.COMPRA_CANCELADA ? 'cancelada' : 'entregada'}',
+                  style: TextStyle(fontSize: 24.0),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 5.0),
                 _crearComentario(),
               ],
@@ -143,19 +142,6 @@ class _CalificacioncompraPageState extends State<CalificacioncompraPage> {
         ],
       ),
     );
-  }
-
-  Widget _estrellas() {
-    double _initialRating = (tipo == conf.TIPO_CLIENTE
-        ? cajeroModel.calificacionCliente
-        : cajeroModel.calificacionCajero);
-
-    return utils.estrellas(_initialRating, (rating) {
-      if (tipo == conf.TIPO_CLIENTE)
-        cajeroModel.calificacionCliente = rating;
-      else
-        cajeroModel.calificacionCajero = rating;
-    });
   }
 
   Widget _crearComentario() {

@@ -69,8 +69,6 @@ class _ContactoPageState extends State<ContactoPage> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    SizedBox(height: 15.0),
-                    _estrellas(),
                     SizedBox(height: 20.0),
                     _crearComentario(),
                   ],
@@ -84,10 +82,6 @@ class _ContactoPageState extends State<ContactoPage> {
   }
 
   double _rating = 4.99;
-
-  Widget _estrellas() {
-    return utils.estrellas(_rating, (value) => _rating = value);
-  }
 
   String _contacto = '';
 

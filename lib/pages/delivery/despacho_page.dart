@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:badges/badges.dart';
 import 'package:blinking_point/blinking_point.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_touch_spin/flutter_touch_spin.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -925,16 +924,6 @@ class DespachoPageState extends State<DespachoPage>
                 ),
                 SizedBox(height: 10.0),
                 _contenidoDialog(),
-                SizedBox(height: 5.0),
-                utils.estrellas(
-                    (tipo == conf.TIPO_CLIENTE
-                        ? despachoModel.calificacionCliente
-                        : despachoModel.calificacionConductor), (rating) {
-                  if (tipo == conf.TIPO_CLIENTE)
-                    despachoModel.calificacionCliente = rating;
-                  else
-                    despachoModel.calificacionConductor = rating;
-                }),
               ],
             ),
             actions: <Widget>[

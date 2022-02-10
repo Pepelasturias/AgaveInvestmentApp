@@ -189,11 +189,6 @@ class _PuntosPageState extends State<PuntosPage> {
                   )
                 ],
               ),
-              _estrellas(),
-              Text(
-                "Correctas: ${_cliente.correctos} - Canceladas: ${_cliente.canceladas}",
-                style: TextStyle(fontSize: 12.0),
-              ),
               _crearCash(),
               _crearSaldo(),
               _crearCredito(),
@@ -293,10 +288,5 @@ class _PuntosPageState extends State<PuntosPage> {
           icon: prs.iconoLink),
       onSaved: (value) => _cliente.nombres = value,
     );
-  }
-
-  Widget _estrellas() {
-    return utils.estrellas(
-        (_cliente.calificacion / _cliente.calificaciones), (value) {});
   }
 }

@@ -1,3 +1,4 @@
+import 'package:curiosity/utils/loader_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -29,7 +30,12 @@ class _DireccionesPageState extends State<DireccionesPage> {
 
   @override
   void initState() {
-    _direccionBloc.listar();
+    final loaderController = LoaderService.of(context);
+    loaderController.showLoader();
+
+    _direccionBloc.listar().then((value) {
+      loaderController.closeLoader();
+    });
     super.initState();
   }
 

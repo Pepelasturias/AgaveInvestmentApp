@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:curiosity/utils/loader_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
@@ -38,8 +38,17 @@ class _ComprasClientePageState extends State<ComprasClientePage>
 
   @override
   void initState() {
+    final loaderController = LoaderService.of(context);
+
+    loaderController.showLoader();
+
     WidgetsBinding.instance.addObserver(this);
-    _comprasClienteBloc.listar(initialDate.year, initialDate.month);
+    _comprasClienteBloc
+        .listar(
+          initialDate.year,
+          initialDate.month,
+        )
+        .then((value) => loaderController.closeLoader());
     super.initState();
 
     _cambios = StreamController<bool>.broadcast();

@@ -183,11 +183,6 @@ class _VentasPageState extends State<VentasPage> {
             )
           ],
         ),
-        _estrellas(),
-        Text(
-          "Correctas: ${_cliente.correctos} - Canceladas: ${_cliente.canceladas}",
-          style: TextStyle(fontSize: 12.0),
-        ),
         SizedBox(height: 10.0),
         _crearNombres(),
         SizedBox(height: 10.0),
@@ -468,10 +463,5 @@ class _VentasPageState extends State<VentasPage> {
         ),
       ),
     );
-  }
-
-  Widget _estrellas() {
-    return utils.estrellas(
-        (_cliente.calificacion / _cliente.calificaciones), (value) {});
   }
 }

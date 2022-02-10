@@ -85,8 +85,11 @@ class _RegistrarPageState extends State<RegistrarPage>
             inAsyncCall: _saving,
             child: SingleChildScrollView(
               child: Center(
-                  child: Container(
-                      child: _contenido(), width: prs.anchoFormulario)),
+                child: Container(
+                  child: _contenido(),
+                  width: prs.anchoFormulario,
+                ),
+              ),
             ),
           ),
         ],
@@ -108,10 +111,9 @@ class _RegistrarPageState extends State<RegistrarPage>
                     right: 35,
                   ),
                   child: Lottie.asset(
-                      'assets/json/greendata.json',                 //archivo a reproducir
-                      repeat: false,                        //si se repite la animacion
-                      fit: BoxFit.fill
-                  ),
+                      'assets/json/greendata.json', //archivo a reproducir
+                      repeat: false, //si se repite la animacion
+                      fit: BoxFit.fill),
                 ),
                 Row(
                   children: [
@@ -375,8 +377,14 @@ class _RegistrarPageState extends State<RegistrarPage>
             apellido += nombres[i] + ' ';
           }
         }
-        _autenticarGoogle(context, currentUser.email, currentUser.photoUrl,
-            currentUser.id, nombre, apellido);
+        _autenticarGoogle(
+          context,
+          currentUser.email,
+          currentUser.photoUrl,
+          currentUser.id,
+          nombre,
+          apellido,
+        );
       }
     });
   }

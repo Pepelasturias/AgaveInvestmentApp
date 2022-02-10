@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:curiosity/pages/invest_page/invest_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -59,8 +60,8 @@ class _MenuWidgetState extends State<MenuWidget> {
                 child: Column(
                   children: <Widget>[
                     _encabezado(context),
-                    Divider(),
-                    Container(
+                    const Divider(),
+                    Padding(
                       padding: EdgeInsets.only(left: 15.0),
                       child: ListTile(
                           dense: true,
@@ -251,6 +252,19 @@ class _MenuWidgetState extends State<MenuWidget> {
                 onTap: () {
                   Navigator.pop(context);
                   Navigator.pushNamed(context, 'facturas_cliente');
+                }),
+          ),
+          Visibility(
+            visible: !_prefs.isExplorar,
+            child: ListTile(
+                dense: true,
+                leading: prs.iconoMoney,
+                title: Text('Mi Inversión'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                    return InvestPageView();
+                  }));
                 }),
           ),
         ],

@@ -353,24 +353,6 @@ Widget bandaIzquierda(bool start, ScrollController pageController) {
   );
 }
 
-Widget estrellas(double initialRating, Function onRatingChanged,
-    {double size: 45.0}) {
-  return Center(
-      child: RatingBar.builder(
-    initialRating: initialRating,
-    minRating: 1,
-    direction: Axis.horizontal,
-    allowHalfRating: true,
-    itemCount: 5,
-    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-    itemBuilder: (context, _) => Icon(
-      Icons.star,
-      color: Colors.amber,
-    ),
-    onRatingUpdate: onRatingChanged,
-  ));
-}
-
 Future<String> obtenerLinkAgencia(
     CatalogoModel catalogo, Function update, Function complet,
     {bool isEncomiendas = false, PromocionModel promocion}) async {

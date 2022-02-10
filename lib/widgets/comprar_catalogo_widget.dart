@@ -9,8 +9,11 @@ class ComprarCatalogoWidget extends StatefulWidget {
   final AsyncSnapshot<List<CatalogoModel>> snapshot;
   final Function onTapCatalogo;
 
-  ComprarCatalogoWidget(this.pageController,
-      {@required this.snapshot, @required this.onTapCatalogo});
+  ComprarCatalogoWidget(
+    this.pageController, {
+    @required this.snapshot,
+    @required this.onTapCatalogo,
+  });
 
   @override
   _ComprarCatalogoWidgetState createState() => _ComprarCatalogoWidgetState();
@@ -21,9 +24,12 @@ class _ComprarCatalogoWidgetState extends State<ComprarCatalogoWidget> {
   bool _final = false;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+
     bool _auxFinal = false;
     bool _auxInicio = true;
+
     widget.pageController.addListener(() {
       _auxFinal = widget.pageController.position.pixels >=
           widget.pageController.position.maxScrollExtent - 50;
@@ -38,6 +44,10 @@ class _ComprarCatalogoWidgetState extends State<ComprarCatalogoWidget> {
         if (mounted) if (mounted) setState(() {});
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(

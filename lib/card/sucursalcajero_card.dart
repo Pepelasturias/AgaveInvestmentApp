@@ -69,28 +69,7 @@ class SucursalcajeroCard extends StatelessWidget {
       ],
     );
 
-    return Stack(
-      children: <Widget>[
-        _avatar,
-        Positioned(
-          bottom: 0.0,
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
-                borderRadius:
-                    BorderRadius.only(bottomLeft: Radius.circular(10.0))),
-            child: _estrellas(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _estrellas() {
-    return utils.estrellas(
-        (sucursalcajeroModel.calificacion / sucursalcajeroModel.calificaciones),
-        (value) {},
-        size: 22.0);
+    return _avatar;
   }
 
   Widget _contenido() {

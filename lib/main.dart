@@ -1,3 +1,4 @@
+import 'package:curiosity/pages/introduction_screen/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -39,7 +40,8 @@ void main() async {
   await utils.getDeviceDetails();
   IntentShare().initIntentShare();
   PushProvider();
-  if (prefs.idCliente == Sistema.ID_CLIENTE) {    //si el idcliente es el de sistema, entra
+  if (prefs.idCliente == Sistema.ID_CLIENTE) {
+    //si el idcliente es el de sistema, entra
     await permisos.ingresar();
   }
   try {
@@ -73,9 +75,12 @@ class _MyAppState extends State<MyApp> {
     } else {
       ruta = 'principal';
     }
-    print(Sistema.DOMINIO_GLOBAL);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: prs.colorAppBar, statusBarBrightness: Brightness.dark));
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: prs.colorAppBar,
+        statusBarBrightness: Brightness.dark,
+      ),
+    );
 
     return MaterialApp(
       title: Sistema.aplicativoTitle,
@@ -90,7 +95,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: Sistema.isTestMode,
       routes: {
         '': (BuildContext context) => RegistrarPage(),
-        'principal': (BuildContext context) => RegistrarPage(),
+        'principal': (BuildContext context) => OnBoardingPage(),
         'registrar': (BuildContext context) => RegistrarPage(),
         'compras_cliente': (BuildContext context) => ComprasClientePage(),
         'direcciones_cliente': (BuildContext context) => DireccionesPage(),
@@ -112,9 +117,13 @@ class _MyAppState extends State<MyApp> {
         'notificacion': (BuildContext context) => NotificacionPage(),
       },
       theme: ThemeData(
-          primaryColor: prs.colorAppBar,
-          appBarTheme: AppBarTheme(
-              elevation: 0.7, centerTitle: true, color: prs.colorAppBar)),
+        primaryColor: prs.colorAppBar,
+        appBarTheme: AppBarTheme(
+          elevation: 0.7,
+          centerTitle: true,
+          color: prs.colorAppBar,
+        ),
+      ),
     );
   }
 }

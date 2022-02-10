@@ -18,16 +18,17 @@ class EnLineaWidgetState extends State<EnLineaWidget>
   AnimationController animationController;
   StreamController<bool> cambios;
 
-  EnLineaWidgetState({this.cambios}) {
-    animationController =
-        AnimationController(duration: Duration(milliseconds: 500), vsync: this);
-  }
+  EnLineaWidgetState({this.cambios});
 
   ConnectBloc _connectBloc = ConnectBloc();
 
   @override
   void initState() {
     super.initState();
+    animationController = AnimationController(
+      duration: Duration(milliseconds: 500),
+      vsync: this,
+    );
     _connectBloc.connectStream.listen((estado) {
       ejecutarAnimacion(estado);
     });
@@ -41,6 +42,13 @@ class EnLineaWidgetState extends State<EnLineaWidget>
   void dispose() {
     animationController?.dispose();
     super.dispose();
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
   }
 
   void disposeStreams() {
