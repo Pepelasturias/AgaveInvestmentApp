@@ -12,7 +12,7 @@
     <application
         android:name=".Application"
         android:icon="@mipmap/launcher_icon"
-        android:label="Curiosity"
+        android:label="Agave Investment"
         tools:replace="android:label">
 
         <meta-data

@@ -62,40 +62,34 @@ class _IntroPageState extends State<IntroPage>
     );
   }
 
+  Widget renderFlexContent() {
+    if (widget.page.image != null) {
+      return Align(
+        alignment: widget.page.decoration.imageAlignment,
+        child: Padding(
+          padding: widget.page.decoration.imagePadding,
+          child: widget.page.image,
+        ),
+      );
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Align(
+          alignment: widget.page.decoration.bodyAlignment,
+          child: IntroContent(page: widget.page),
+        ),
+      ],
+    );
+  }
+
   Widget _buildFlex() {
     return Container(
       color: widget.page.decoration.pageColor,
       decoration: widget.page.decoration.boxDecoration,
       margin: const EdgeInsets.only(bottom: 60.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (widget.page.image != null)
-            Expanded(
-              flex: widget.page.decoration.imageFlex,
-              child: Align(
-                alignment: widget.page.decoration.imageAlignment,
-                child: Padding(
-                  padding: widget.page.decoration.imagePadding,
-                  child: widget.page.image,
-                ),
-              ),
-            ),
-          Expanded(
-            flex: widget.page.decoration.bodyFlex,
-            child: Align(
-              alignment: widget.page.decoration.bodyAlignment,
-              child: widget.page.useScrollView
-                  ? SingleChildScrollView(
-                      controller: widget.scrollController,
-                      physics: const BouncingScrollPhysics(),
-                      child: IntroContent(page: widget.page),
-                    )
-                  : IntroContent(page: widget.page),
-            ),
-          ),
-        ].asReversed(widget.page.reverse),
-      ),
+      child: renderFlexContent(),
     );
   }
 

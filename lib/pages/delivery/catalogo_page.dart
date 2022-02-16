@@ -842,6 +842,7 @@ class _CatalogoPageState extends State<CatalogoPage>
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(child: _buscador()),
+        SliverToBoxAdapter(child: _categorias()),
         SliverToBoxAdapter(
           child: StreamBuilder(
             stream: _catalogoBloc.recomendadoStream,
@@ -854,7 +855,6 @@ class _CatalogoPageState extends State<CatalogoPage>
             },
           ),
         ),
-        SliverToBoxAdapter(child: _categorias()),
         SliverToBoxAdapter(child: _productosDestacados(context)),
         SliverToBoxAdapter(
           child: _label('Mejor valorados', 'Las personas los aman'),

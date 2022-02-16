@@ -4,7 +4,7 @@ description: Compra a domicilio a los mejores restaurantes en Loja, encuentra ca
 #
 # Flutter Version -> 2.0.6
 #
-version: 0.0.5+5
+version: 0.0.2
 
 environment:
   sdk: ">=2.11.0 <3.0.0"
